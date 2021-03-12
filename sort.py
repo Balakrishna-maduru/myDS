@@ -1,6 +1,6 @@
 
 
-class Sort:
+class ArraySort:
 
 	def __init__(self, array):
 		self.__arr = array
@@ -11,9 +11,12 @@ class Sort:
 
 	def insertion_sort(self):
 		for value in range(1,self.__arr_len):
-			key = self.__arr[value-1]
-			while value >= 0 and self.__arr[value] < key:
-				self.__arr[value-1] = self.__arr[value]
+			key = self.__arr[value]
+			i= value - 1
+			while i >= 0 and self.__arr[i] > key:
+				self.__arr[i+1] = self.__arr[i]
+				i = i-1
+			self.__arr[i+1] = key
 
 	def selection_sort(self):
 		""" Selection sort algorithm sorts an array by repeatedly finding the minimum element (considering ascending order) 
@@ -35,7 +38,6 @@ class Sort:
 			for another_item in range(item+1,self.__arr_len):
 				if self.__arr[item] > self.__arr[another_item]:
 					min_index = another_item 
-			self.print_array()
 			self.__arr[item], self.__arr[min_index]  = self.__arr[min_index], self.__arr[item]
 
 	def bubble_sort(self):
@@ -58,14 +60,13 @@ class Sort:
 		for item in range(self.__arr_len):
 			exit_flag = 0
 			for inner_item in range(self.__arr_len-item-1):
-				if self.__arr[inner_item] > self.__arr[inner_item+1]:
-					self.__arr[inner_item], self.__arr[inner_item+1] = self.__arr[inner_item+1], self.__arr[inner_item]
+				if self.__arr[inner_item] > self.__arr[inner_item + 1]:
+					self.__arr[inner_item], self.__arr[inner_item + 1] = self.__arr[inner_item + 1], self.__arr[inner_item]
 					exit_flag = 1
-			self.print_array()
 			if exit_flag == 0:
 				break
 
 if __name__ == "__main__":
-	sort = Sort([5,4,3,2,1])
-	sort.selection_sort()
+	sort = ArraySort([5,4,3,2,1])
+	sort.insertion_sort()
 	sort.print_array()
