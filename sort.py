@@ -66,7 +66,85 @@ class ArraySort:
 			if exit_flag == 0:
 				break
 
+	def merge(self, left, right, array):
+		left_len = len(left)
+		right_len = len(right)
+		i = j = k = 0
+		while i < left_len and j < right_len:
+			if left[i] < right[j]:
+				array[k] = left[i]
+				i = i + 1
+			else:
+				array[k] = right[j]
+				j = j + 1
+			k = k+1
+		while i < left_len:
+			array[k] = left[i]
+			i = i + 1
+			k = k + 1
+		while j < right_len:
+			array[k] = right[j]
+			j = j + 1
+			k = k + 1
+		return array
+
+	def merge_sort_recursion(self, arr):
+		""" Merge Sort is a Divide and Conquer algorithm. It divides the input array into two halves, 
+			calls itself for the two halves, and then merges the two sorted halves. The merge() function is used for merging two halves. 
+			The merge(arr, l, m, r) is a key process that assumes that arr[l..m] and arr[m+1..r] are sorted and merges the two sorted sub-arrays into one
+
+			Input	: [5, 4, 3, 2, 1]
+
+					[6, 5, 4, 3, 2, 1]
+				[6, 5, 4]		<-L R->		[3, 2, 1]
+				[6, 5] <-L R-> [4] 		[3, 2] <-L R-> [1]
+				[6] <-L R-> [5]	 [4]	[3]<-L R->[2] [1]
+				[5, 6] [4]	[2, 3] [1] --> merge
+				[4,5,6]				[1,2,3] --> merge
+					[1, 2, 3, 4, 5, 6]
+
+			Output	: [1, 2, 3, 4, 5]
+
+			Time complexity:
+				Worst case		: O(nlogn)
+			Space complexity	: O(n)
+
+		"""
+		if len(arr) < 2:
+			return
+		mid = len(arr)//2
+		left = arr[:mid]
+		right = arr[mid:]
+		self.merge_sort_recursion(left)
+		self.merge_sort_recursion(right)
+		arr = self.merge(left, right, arr)
+		return arr
+
+	def merge_sort(self):
+		self.__arr = self.merge_sort_recursion(self.__arr)
+
+	
+	def partition(self, array, start, end):
+		pivot = array[end]
+		pindex = start
+		for i in range(start, end):
+			if array[i] <= pivot:
+				array[i], array[pindex] = array[pindex], array[i]
+				pindex += 1
+		array[end], array[pindex] = array[pindex], array[end]
+		return pindex
+
+	def quick_sort_recursion(self, array, start, end):
+		if start < end:
+			pindex = self.partition(array, start, end)
+			self.quick_sort_recursion(array,start, pindex - 1)
+			self.quick_sort_recursion(array,pindex + 1, end)
+
+	def quick_sort(self):
+		self.quick_sort_recursion(self.__arr,0,self.__arr_len-1)
+
+
 if __name__ == "__main__":
-	sort = ArraySort([5,4,3,2,1])
-	sort.insertion_sort()
+	sort = ArraySort([5,4,3,6,2,1])
+	sort.quick_sort()
 	sort.print_array()
